@@ -4,9 +4,13 @@ test('Update user that does not exist', async ({
   usersApi,
   registeredUser,
 }) => {
-  registeredUser['token'] = '';
+  const nonExistingUser = {
+    ...registeredUser,
+    email: 'notexisting@email.com',
+    username: 'notexistingusername',
+  };
 
-  const response = await usersApi.updateUser(registeredUser);
+  const response = await usersApi.updateUser(nonExistingUser);
 
-  await usersApi.assertUnauthorizedResponseCode(response);
+  await usersApi.assertNotFoundResponseCode(response);
 });
